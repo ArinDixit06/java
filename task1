@@ -1,0 +1,148 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+/**
+ * Represents a single student record.
+ * This class holds all the data related to a student and methods to manage it.
+ */
+class Student {
+    // --- Attributes ---
+    private int rollNo;
+    private String name;
+    private String course;
+    private int marks;
+    private char grade;
+
+    // --- Constructor ---
+    /**
+     * Constructs a new Student object.
+     * @param rollNo The student's roll number.
+     * @param name The student's name.
+     * @param course The student's course.
+     * @param marks The marks obtained by the student.
+     */
+    public Student(int rollNo, String name, String course, int marks) {
+        this.rollNo = rollNo;
+        this.name = name;
+        this.course = course;
+        this.marks = marks;
+        this.grade = calculateGrade(); // Grade is calculated upon object creation
+    }
+
+    // --- Methods ---
+
+    /**
+     * Calculates the grade based on the student's marks.
+     * This is a private helper method called by the constructor.
+     * @return The calculated character grade ('A', 'B', 'C', 'D', or 'F').
+     */
+    private char calculateGrade() {
+        if (marks >= 90) {
+            return 'A';
+        } else if (marks >= 80) {
+            return 'B';
+        } else if (marks >= 70) {
+            return 'C';
+        } else if (marks >= 60) {
+            return 'D';
+        } else {
+            return 'F';
+        }
+    }
+
+    /**
+     * Displays the complete record of the student in a formatted way.
+     */
+    public void displayRecord() {
+        System.out.println("---------------------------------");
+        System.out.println("Roll Number : " + rollNo);
+        System.out.println("Name        : " + name);
+        System.out.println("Course      : " + course);
+        System.out.println("Marks       : " + marks);
+        System.out.println("Grade       : " + grade);
+        System.out.println("---------------------------------");
+    }
+
+    // --- Getter for Roll Number (useful for searching/checking duplicates) ---
+    public int getRollNo() {
+        return rollNo;
+    }
+}
+
+/**
+ * The main class that runs the Student Record Management System.
+ * It provides a command-line interface for the user to interact with the system.
+ */
+public class StudentRecordManagement {
+
+    public static void main(String[] args) {
+        // Scanner for user input
+        Scanner scanner = new Scanner(System.in);
+        // ArrayList to store all student objects
+        ArrayList<Student> studentList = new ArrayList<>();
+
+        int choice;
+
+        // Main menu loop
+        do {
+            System.out.println("\n--- Student Record Management System ---");
+            System.out.println("1. Add New Student");
+            System.out.println("2. Display All Student Records");
+            System.out.println("3. Exit");
+            System.out.print("Enter your choice: ");
+
+            choice = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character left by nextInt()
+
+            switch (choice) {
+                case 1:
+                    // --- Add a new student ---
+                    System.out.print("\nEnter Roll Number: ");
+                    int rollNo = scanner.nextInt();
+                    scanner.nextLine(); // Consume newline
+
+                    System.out.print("Enter Name: ");
+                    String name = scanner.nextLine();
+
+                    System.out.print("Enter Course: ");
+                    String course = scanner.nextLine();
+
+                    System.out.print("Enter Marks (out of 100): ");
+                    int marks = scanner.nextInt();
+
+                    // Create a new Student object and add it to the list
+                    Student newStudent = new Student(rollNo, name, course, marks);
+                    studentList.add(newStudent);
+
+                    System.out.println("\nStudent record added successfully!");
+                    break;
+
+                case 2:
+                    // --- Display all records ---
+                    System.out.println("\n--- All Student Records ---");
+                    if (studentList.isEmpty()) {
+                        System.out.println("No records found. Please add a student first.");
+                    } else {
+                        // Iterate through the list and display each student's record
+                        for (Student student : studentList) {
+                            student.displayRecord();
+                        }
+                    }
+                    break;
+
+                case 3:
+                    // --- Exit the program ---
+                    System.out.println("\nExiting the program. Thank you!");
+                    break;
+
+                default:
+                    // --- Handle invalid input ---
+                    System.out.println("\nInvalid choice. Please enter a number between 1 and 3.");
+                    break;
+            }
+        } while (choice != 3);
+
+        // Close the scanner to prevent resource leaks
+        scanner.close();
+    }
+}
